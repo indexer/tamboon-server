@@ -13,8 +13,11 @@ type Donation struct {
 }
 
 type Result struct {
-	Status int `json:"status"`
 	Success bool `json:"success"`
+}
+
+type Error struct {
+	Message string `json:"message"`
 }
 
 var charities = []*Charity{

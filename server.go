@@ -29,8 +29,9 @@ func (handler *TamboonHandler) ServeHTTP(resp http.ResponseWriter, req *http.Req
 }
 
 func (handler *TamboonHandler) GET(resp http.ResponseWriter, req *http.Request) {
+	resp.Header().Set("Content-Type","application/json")//Set Content-Type Header
 	if e := json.NewEncoder(resp).Encode(charities); e != nil {
-		http.Error(resp, e.Error(), 500)
+		http.Error(resp, e.Error(), 400)
 		return
 	}
 }
@@ -38,9 +39,11 @@ func (handler *TamboonHandler) GET(resp http.ResponseWriter, req *http.Request) 
 func (handler *TamboonHandler) POST(resp http.ResponseWriter, req *http.Request) {
 	donation := &Donation{}
 	defer req.Body.Close()
+	resp.Header().Set("Content-Type","application/json")
 
 	if e := json.NewDecoder(req.Body).Decode(donation); e != nil {
-		http.Error(resp, e.Error(), 400)
+		resp.WriteHeader(http.StatusTeapot)
+		json.NewEncoder(resp).Encode(&Error{Message: e.Error()})
 		return
 	}
 
@@ -50,13 +53,14 @@ func (handler *TamboonHandler) POST(resp http.ResponseWriter, req *http.Request)
 		Currency:    "THB",
 		Description: donation.Name,
 	}
+
 	if e := handler.client.Do(charge, operation); e != nil {
 		http.Error(resp, e.Error(), 400)
 		return
 	}
 
-	if e := json.NewEncoder(resp).Encode(&Result{Status:200,Success: true}); e != nil {
-		http.Error(resp, e.Error(), 500)
+	if e := json.NewEncoder(resp).Encode(&Result{Success: true}); e != nil {
+		http.Error(resp, e.Error(), 400)
 		return
 	}
 }
