@@ -20,6 +20,8 @@ type Error struct {
 	Message string `json:"message"`
 }
 
+
+
 var charities = []*Charity{
 	&Charity{Id: 0, Name: "Ban Khru Noi", LogoURL: "http://rkdretailiq.com/news/img-corporate-baankrunoi.jpg"},
 	&Charity{Id: 1, Name: "Habitat for Humanity Thailand", LogoURL: "http://www.adamandlianne.com/uploads/2/2/1/6/2216267/3231127.gif"},

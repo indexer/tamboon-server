@@ -20,8 +20,8 @@ func (handler *TamboonHandler) ServeHTTP(resp http.ResponseWriter, req *http.Req
 		handler.GET(resp, req)
 
 	} else if method == "POST" && path == "/donate" {
-		handler.POST(resp, req)
 
+		handler.POST(resp, req)
 	} else {
 		http.NotFound(resp, req)
 
@@ -41,7 +41,7 @@ func (handler *TamboonHandler) POST(resp http.ResponseWriter, req *http.Request)
 
 
 	if e := json.NewDecoder(req.Body).Decode(donation); e != nil {
-		resp.WriteHeader(http.StatusTeapot)
+		resp.WriteHeader(http.StatusBadRequest)
 		json.NewEncoder(resp).Encode(&Error{Message: e.Error()})
 		return
 	}
